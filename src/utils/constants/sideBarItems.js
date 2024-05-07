@@ -5,8 +5,9 @@ import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import ReceiptIcon from '@mui/icons-material/Receipt';
-import ListAltIcon from '@mui/icons-material/ListAlt';
+import ReceiptIcon from "@mui/icons-material/Receipt";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 
 export const Menu = [
   {
@@ -18,33 +19,34 @@ export const Menu = [
     name: "Inventory",
     icon: <InventoryIcon />,
     link: "/inventory",
+    subPaths: [
+      "/inventory/hardware",
+      "/inventory/chemical",
+      "/inventory/steel",
+      "/inventory/electrical",
+      "/inventory/bolt&nut",
+      "/inventory/plumbing",
+      "/inventory/other",
+      "/chemical",
+      "/inventory/item-add",
+      "/inventory/item-edit",
+      "/inventory/item-view"
+    ],
   },
-  // {
-  //   name: "Inventory",
-  //   icon: <AssignmentIcon />,
-  //   link: "/",
-  //   children: [
-  //     {
-  //       name: "Inventory",
-  //       icon: <InventoryIcon />,
-  //       link: "/inventory",
-  //     },
-  //     {
-  //       name: "Master Inventory",
-  //       icon: <InventoryIcon />,
-  //       link: "/master-inventory",
-  //     },
-  //   ],
-  // },
   {
     name: "Orders",
     icon: <LocalShippingIcon />,
     link: "/orders",
   },
   {
-    name: "Schedular",
-    icon: <ManageHistoryIcon />,
-    link: "/schedular",
+    name: "Sales Reps",
+    icon: <PeopleAltIcon />,
+    link: "/sales-reps",
+    subPaths: [
+      "/sales-reps/sales-rep-add",
+      "/sales-reps/sales-rep-edit",
+      "/sales-reps/sales-rep-view",
+    ],
   },
   {
     name: "Invoice",

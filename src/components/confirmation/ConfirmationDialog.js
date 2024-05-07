@@ -32,7 +32,9 @@ export default function ConfirmationDialog({
           onClick={handleClose}
           autoFocus
           variant="contained"
-          color="success"
+          sx={{
+            color: "",
+          }}
         >
           No
         </Button>
@@ -40,10 +42,7 @@ export default function ConfirmationDialog({
           onClick={ConfirmAction}
           variant="contained"
           sx={{
-            backgroundColor: "red",
-            "&:hover": {
-              backgroundColor: "#d62828", // Change this value to your desired hover background color
-            },
+            color: "",
           }}
         >
           Yes

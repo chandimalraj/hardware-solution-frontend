@@ -15,6 +15,7 @@ import styled from "styled-components";
 // import { showToasts } from "../toast";
 import { ToastContainer } from "react-toastify";
 import { LoginFunction } from "./LoginFunction";
+import { useIsUserLoggedIn } from "../../hooks/authentication";
 // import LoginComponent from "./userLogin/Login";
 // import ForgotPassword from "./resetPassword/ForgotPassword";
 
@@ -32,7 +33,7 @@ export default function Login() {
     },
   };
 
-  // useIsUserLoggedIn()
+   //useIsUserLoggedIn()
   // useIsUserLoggedIn()
     
 

@@ -13,6 +13,13 @@ import styled from "styled-components";
 import { showToasts } from "../toast";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import {
+  passwordValidation,
+  userNameValidation,
+} from "./validation/validation";
+import { userLogin } from "../../services/authService";
+import { useSnackBars } from "../../context/SnackBarContext";
+import { SnackBarTypes } from "../../utils/constants/snackBarTypes";
 
 const sheet = {
   mainTopic: {
@@ -26,11 +33,11 @@ const sheet = {
 export function LoginFunction(props) {
   //   const { controlShow, loginUser } = props;
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [type, setType] = useState();
   const [formData, setFormData] = useState({
-    mobile: "",
+    username: "",
     password: "",
   });
   const [error, setError] = useState({
@@ -39,21 +46,21 @@ export function LoginFunction(props) {
   });
 
   const submit = async (e) => {
-    // e.preventDefault();
-    // const mobileValid = mobileValidation(formData.mobile);
-    // const passwordValid = passwordValidation(formData.password);
-    // if (mobileValid) {
-    //   setError({
-    //     errorMobile: "",
-    //     errorPassword: "",
-    //   });
-    // } else {
-    //   setError({
-    //     errorMobile: "Please Enter Valid Mobile Number",
-    //     errorPassword: "",
-    //   });
-    //   return;
-    // }
+    e.preventDefault();
+    const mobileValid = userNameValidation(formData.username);
+    const passwordValid = passwordValidation(formData.password);
+    if (mobileValid) {
+      setError({
+        errorMobile: "",
+        errorPassword: "",
+      });
+    } else {
+      setError({
+        errorMobile: "Please Enter Valid User Name",
+        errorPassword: "",
+      });
+      return;
+    }
     // if (passwordValid) {
     //   setError({
     //     errorMobile: "",
@@ -66,9 +73,11 @@ export function LoginFunction(props) {
     //   });
     //   return;
     // }
-    // loginUser(formData);
-    login()
+    //loginUser(formData);
+    login();
   };
+
+  const { addSnackBar } = useSnackBars();
 
   const handleChange = (e) => {
     setError({
@@ -81,27 +90,30 @@ export function LoginFunction(props) {
     });
   };
 
-  const login = async ()=>{
+  const login = async () => {
+    try {
+      const response = await userLogin(formData, onSuccess);
+      if (response.status == 200) {
+        console.log(response);
 
-    //  try {
+        navigate("/dashboard");
+        // showToasts("SUCCESS", "Logged In Successfully");
+      } else {
+        showToasts("ERROR", "Log In Unsuccessfull");
+      }
+    } catch (error) {
+      console.log(error);
+      showToasts("ERROR", "login unsuccessfull");
+    }
+    // showToasts("SUCCESS", "Login Success")
+  };
 
-    //   const response = await userLogin(formData)
-    //   if(response.status == 200){
-    //     console.log(response)
-    //     showToasts("SUCCESS", "successfully login")
-    //   }else{
-    //     showToasts("ERROR", "login unsuccessfull")
-    //   }
-
-    //  } catch (error) {
-    //   console.log(error)
-    //   showToasts("ERROR", "login unsuccessfull")
-    //  }
-     showToasts("SUCCESS", "Login Success")
-    navigate('/dashboard')
-    
-
-  }
+  const onSuccess = () => {
+    addSnackBar({
+      type: SnackBarTypes.success,
+      message: "Successfully Logged In",
+    });
+  };
 
   return (
     <Paper
@@ -131,16 +143,16 @@ export function LoginFunction(props) {
       <form className="w-75 mb-5 text-white" onSubmit={submit}>
         <div className="w-100">
           <div className="mb-2">
-            <label className="text-small mb-1">Mobile Number</label>
+            <label className="text-small mb-1">User Name</label>
             <TextField
               type="text"
               align="center"
               //   ref={userRef}
               fullWidth
-              placeholder="07X-XXXXXXX"
-              name="mobile"
+              placeholder="user name"
+              name="username"
               variant="outlined"
-              value={formData.mobile}
+              value={formData.username}
               onChange={handleChange}
               required
               autoFocus

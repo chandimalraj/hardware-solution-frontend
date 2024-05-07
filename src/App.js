@@ -5,18 +5,23 @@ import { Routes, BrowserRouter } from "react-router-dom";
 import PermissionWrapper from "./components/permissionWrapper";
 import { MiniDrawer } from "./components/global/NewNavBar";
 import styled from "styled-components";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer} from "react-toastify";
+import { SnackBarProvider } from "./context/SnackBarContext";
+import SnackBars from "./components/SnackBar/SnackBars";
 
 function App() {
   return (
     <>
+    <SnackBarProvider>
       <BrowserRouter>
         <Wrapper>
+          <ToastContainer />
           <PermissionWrapper component={<MiniDrawer />} />
           <Routes>{Router}</Routes>
-          <ToastContainer/>
         </Wrapper>
       </BrowserRouter>
+      <SnackBars/>
+      </SnackBarProvider>
     </>
   );
 }

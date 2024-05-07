@@ -43,12 +43,15 @@ import { ExpandMore } from "@mui/icons-material";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import { useLocation } from "react-router-dom";
 import SettingsIcon from "@mui/icons-material/Settings";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import Tooltip from "@mui/material/Tooltip";
 import MenuBlock from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { useIsUserLoggedIn } from "../../hooks/authentication";
+import { useSnackBars } from "../../context/SnackBarContext";
+import { SnackBarTypes } from "../../utils/constants/snackBarTypes";
 
 const drawerWidth = 240;
 
@@ -127,7 +130,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export function MiniDrawer(props) {
-  const { logOutUser } = props;
+  useIsUserLoggedIn();
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   const navigate = useNavigate();
@@ -156,22 +159,36 @@ export function MiniDrawer(props) {
 
   const handleLogoutAction = () => {
     setOpenDlg(true);
-    setOpenLogOut(true)
+    setOpenLogOut(true);
   };
 
-  const handleClose = ()=>{
-    setOpenLogOut(false)
-  }
-  const handleOpen = ()=>{
-    setOpenLogOut(true)
-  }
+  const handleClose = () => {
+    setOpenLogOut(false);
+  };
+  const handleOpen = () => {
+    setOpenLogOut(true);
+  };
 
-  const handleLogout = async () => {
+  const { addSnackBar } = useSnackBars();
+
+  const onSuccess = () => {
+    addSnackBar({
+      type: SnackBarTypes.success,
+      message: "Log Out Successfully",
+    });
+  };
+  const onError = () => {
+    addSnackBar({
+      type: SnackBarTypes.error,
+      message: "There is an error",
+    });
+  };
+
+  const handleLogout = () => {
     try {
-      localStorage.removeItem("jwtToken");
-      logOutUser();
       navigate("/");
-      showToasts("SUCCESS", "Log Out successfully!");
+      localStorage.removeItem("jwtToken");
+      onSuccess();
     } catch (error) {
       console.log(error);
     }
@@ -207,7 +224,7 @@ export function MiniDrawer(props) {
             fontSize={20}
             sx={{ color: "black", fontWeight: "600", marginRight: "15px" }}
           >
-             HARD SMART
+            HARD SMART
           </Typography>
           <Tooltip title="Settings">
             <IconButton
@@ -228,21 +245,21 @@ export function MiniDrawer(props) {
           <div style={{ flexGrow: 1 }} />
 
           {/* <Tooltip title="Log Out"> */}
-            <IconButton
-              onClick={handleOpen}
-              sx={{
-                minWidth: 10,
-                justifyContent: "center",
-                color: "#e5e4e2",
-                backgroundColor: "#035CA1",
-                "&:hover": {
-                  backgroundColor: "black", // Change this value to your desired hover background color
-                },
-              }}
-            >
-              <PersonRoundedIcon fontSize="medium" />
-            </IconButton>
-            <MenuBlock
+          <IconButton
+            onClick={handleOpen}
+            sx={{
+              minWidth: 10,
+              justifyContent: "center",
+              color: "#e5e4e2",
+              backgroundColor: "#035CA1",
+              "&:hover": {
+                backgroundColor: "black", // Change this value to your desired hover background color
+              },
+            }}
+          >
+            <PersonRoundedIcon fontSize="medium" />
+          </IconButton>
+          <MenuBlock
             id="demo-positioned-menu"
             aria-labelledby="demo-positioned-button"
             anchorEl={true}
@@ -256,15 +273,15 @@ export function MiniDrawer(props) {
               vertical: "top",
               horizontal: "left",
             }}
-            sx={{ marginTop:"50px" }}
-
+            sx={{ marginTop: "50px" }}
           >
-            
-            <Tooltip title="Settings">  <MenuItem onClick={handleLogoutAction}>Logout</MenuItem></Tooltip>
+            <Tooltip title="Settings">
+              {" "}
+              <MenuItem onClick={handleLogoutAction}>Logout</MenuItem>
+            </Tooltip>
           </MenuBlock>
           {/* </Tooltip> */}
         </Toolbar>
-        
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
@@ -438,7 +455,13 @@ export function MiniDrawer(props) {
                   <ListItem
                     key={item.text}
                     disablePadding
-                    selected={location.pathname == item.link}
+                    selected={
+                      location.pathname == item.link ||
+                      item.subPaths?.find((i) => i == location.pathname)
+                    }
+                    // selected={() => {
+                    //  return false
+                    // }}
                     onClick={() => {
                       setSelected(item.link);
                       console.log(selected);
