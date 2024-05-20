@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Table from "./table/Table";
-import { Box, Button, ButtonGroup, Paper } from "@mui/material";
+import { Box, Button, ButtonGroup, Paper, Typography } from "@mui/material";
 import { Add, Delete, Edit, Vrpano } from "@mui/icons-material";
 import { colors } from "../../../utils/constants/colors";
 import SearchBar from "./searchBar/SearchBar";
@@ -14,6 +14,8 @@ import {
 import { DEF_ACTIONS } from "../../../utils/constants/actions";
 import { useSnackBars } from "../../../context/SnackBarContext";
 import { SnackBarTypes } from "../../../utils/constants/snackBarTypes";
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+
 
 export default function () {
   const location = useLocation();
@@ -21,8 +23,8 @@ export default function () {
   useIsUserLoggedIn();
   const [selected, setSelected] = useState([]);
   const [data, setData] = useState([]);
-  const [page,setPage] = useState(1)
-  const [pageSize,setPageSize] = useState(1000)
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(1000);
   const naviagte = useNavigate();
   const addItem = () => {
     naviagte("/inventory/item-add", {
@@ -79,7 +81,13 @@ export default function () {
 
   const getItems = async () => {
     try {
-      const response = await getAllItemsByCategory(location?.state?.category, page,pageSize,onSuccess,onError);
+      const response = await getAllItemsByCategory(
+        location?.state?.category,
+        page,
+        pageSize,
+        onSuccess,
+        onError
+      );
       setData(response.data.data);
       console.log(response.data);
     } catch (error) {
@@ -89,16 +97,50 @@ export default function () {
 
   const search = async (e) => {
     try {
-      const response = await getItemsByName(e , location?.state?.category);
+      const response = await getItemsByName(e, location?.state?.category);
       setData(response.data.data);
     } catch (error) {
       console.log(error);
     }
   };
-  
+
+  const goToCategories = ()=>{
+    naviagte("/inventory")
+  }
+
   return (
     <div className="w-100 p-3 pt-5 mt-4">
       <Paper sx={{ padding: 2 }}>
+        <Box
+          sx={{
+            marginBottom: 1,
+            display: "flex",
+            height:45
+          }}
+        >
+          <Button sx={{ border: "Highlight" }} onClick={goToCategories} variant="contained">
+          <KeyboardDoubleArrowLeftIcon />
+              BACK
+            </Button>
+          <Typography
+            sx={{
+              fontSize: 16,
+              fontWeight: 500,
+              marginBottom: 1,
+              color: "white",
+              fontFamily: "Roboto",
+              backgroundColor: colors.main,
+              padding: 1,
+              borderRadius: 1,
+              height:45,
+              marginLeft:2
+            }}
+          >
+            {location?.state?.name}
+            {" Items"}
+          </Typography>
+        </Box>
+
         <Box
           sx={{
             marginBottom: 1,

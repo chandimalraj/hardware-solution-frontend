@@ -21,6 +21,25 @@ export const createSalesRep = async (
   }
 };
 
+export const editSalesRep = async (
+  salesRep,
+  onSuccess = () => {},
+  onError = (_message) => {}
+) => {
+  try {
+    const response = await axiosPrivate.post(
+      "/api/salesrep/editSalesRep",
+      salesRep
+    );
+    if (response.status == 201) {
+      onSuccess();
+    }
+    return response;
+  } catch (error) {
+    onError(error);
+  }
+};
+
 export const getAllSalesReps = async (
   onSuccess = () => {},
   onError = (_message) => {}

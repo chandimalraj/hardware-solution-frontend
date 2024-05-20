@@ -221,10 +221,10 @@ export function MiniDrawer(props) {
             variant="h6"
             noWrap
             component="div"
-            fontSize={20}
-            sx={{ color: "black", fontWeight: "600", marginRight: "15px" }}
+            fontSize={18}
+            sx={{ color: "black", fontWeight: "600", marginRight: "15px" ,fontFamily:'Roboto'}}
           >
-            HARD SMART
+            HARDWARE SOLUTION
           </Typography>
           <Tooltip title="Settings">
             <IconButton

@@ -21,7 +21,7 @@ import { DEF_ACTIONS } from "../../../../utils/constants/actions";
 import { useSnackBars } from "../../../../context/SnackBarContext";
 import { SnackBarTypes } from "../../../../utils/constants/snackBarTypes";
 import { createItem } from "../../../../services/itemService";
-import { createSalesRep } from "../../../../services/salesRepService";
+import { createSalesRep, editSalesRep } from "../../../../services/salesRepService";
 
 export default function SalesRepForm() {
   useIsUserLoggedIn();
@@ -52,6 +52,12 @@ export default function SalesRepForm() {
       message: "Sales Rep Created Successfully",
     });
   };
+  const onSuccessEdit = () => {
+    addSnackBar({
+      type: SnackBarTypes.success,
+      message: "Sales Rep Updated Successfully",
+    });
+  };
   const onError = () => {
     addSnackBar({
       type: SnackBarTypes.error,
@@ -61,8 +67,15 @@ export default function SalesRepForm() {
 
   const submitForm = async () => {
     try {
-      const response = await createSalesRep(formData, onSuccess, onError);
-      console.log(response);
+      if(state?.action == DEF_ACTIONS.ADD){
+        const response = await createSalesRep(formData, onSuccess, onError);
+        console.log(response);
+      }
+      if(state?.action == DEF_ACTIONS.EDIT){
+        const response = await editSalesRep(formData, onSuccessEdit, onError);
+        console.log(response);
+      }
+      
     } catch (error) {
       console.log(error);
     }

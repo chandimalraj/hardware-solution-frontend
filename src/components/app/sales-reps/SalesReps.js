@@ -136,29 +136,32 @@ export default function SalesReps() {
           <ButtonGroup
             variant="contained"
             disableElevation
-            size="small"
+           
             aria-label="action button group"
             sx={{
               //color:colors.main,
               marginRight: 5,
+              height:47,
+              width:300,
+
             }}
           >
-            <Button sx={{ border: "Highlight" }} onClick={addItem}>
+            <Button sx={{ border: "Highlight",padding:2 ,fontSize:13}} onClick={addItem}>
               <Add />
               ADD
             </Button>
 
-            <Button disabled={selected.length !== 1} onClick={editItem}>
+            <Button  sx={{ border: "Highlight",padding:2 ,fontSize:13}} disabled={selected.length !== 1} onClick={editItem}>
               <Edit />
               Edit
             </Button>
 
-            <Button disabled={selected.length !== 1} onClick={viewItem}>
+            <Button sx={{ border: "Highlight",padding:2 ,fontSize:13}} disabled={selected.length !== 1} onClick={viewItem}>
               <Vrpano />
               View
             </Button>
 
-            <Button disabled={selected.length < 1} onClick={handleDialogOpen}>
+            <Button sx={{ border: "Highlight",padding:2 ,fontSize:13}} disabled={selected.length < 1} onClick={handleDialogOpen}>
               <Delete />
               Delete
             </Button>

@@ -125,7 +125,7 @@ export default function ItemForm() {
   return (
     <div className="w-100 p-3 pt-5 mt-4">
       <Paper sx={{ padding: 2, height: 600 }}>
-        <IconButton
+        {/* <IconButton
           sx={{
             minWidth: 10,
             //   mr: open ? 3 : "auto",
@@ -140,14 +140,19 @@ export default function ItemForm() {
           onClick={goBack}
         >
           <KeyboardDoubleArrowLeftIcon />
-        </IconButton>
+        </IconButton> */}
 
-        <Box sx={{ display: "flex", flexDirection: "column", width: 75 }}>
+        <Box sx={{ display: "flex", flexDirection: "row" ,height:40}}>
+          <Button sx={{ border: "Highlight" }} variant="contained" onClick={goBack}>
+          <KeyboardDoubleArrowLeftIcon />
+            BACK
+          </Button>
           {state?.action == DEF_ACTIONS.ADD && (
             <Button
-              sx={{ border: "Highlight" }}
+              sx={{ border: "Highlight" , marginLeft:1 }}
               variant="contained"
               onClick={submitForm}
+              
             >
               <Add />
               ADD
@@ -155,7 +160,7 @@ export default function ItemForm() {
           )}
           {state?.action == DEF_ACTIONS.EDIT && (
             <Button
-              sx={{ border: "Highlight" }}
+              sx={{ border: "Highlight", marginLeft:1 }}
               variant="contained"
               onClick={submitEditItem}
             >
@@ -164,7 +169,7 @@ export default function ItemForm() {
             </Button>
           )}
         </Box>
-        <Grid container sx={{ marginTop: 3 }}>
+        <Grid container sx={{ marginTop: 2 }}>
           <Grid item lg={4}>
             <FieldWrapper>
               <FieldName>Item Name</FieldName>
