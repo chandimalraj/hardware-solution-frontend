@@ -3,13 +3,16 @@ import { showToasts } from "../components/toast";
 import axios, { axiosPrivate } from "../services/api";
 import { baseURL } from "../utils/constants/api";
 
-export const createItem = async (
-  item,
+export const createCustomer = async (
+  customer,
   onSuccess = () => {},
   onError = (_message) => {}
 ) => {
   try {
-    const response = await axiosPrivate.post("/api/item/addItem", item);
+    const response = await axiosPrivate.post(
+      "/api/customer/addCustomer",
+      customer
+    );
     if (response.status == 201) {
       onSuccess();
     }
@@ -19,13 +22,16 @@ export const createItem = async (
   }
 };
 
-export const editItem = async (
-  item,
+export const editCustomer = async (
+  customer,
   onSuccess = () => {},
   onError = (_message) => {}
 ) => {
   try {
-    const response = await axiosPrivate.post("/api/item/editItem", item);
+    const response = await axiosPrivate.post(
+      "/api/customer/editCustomer",
+      customer
+    );
     if (response.status == 201) {
       onSuccess();
     }
@@ -35,33 +41,14 @@ export const editItem = async (
   }
 };
 
-
-
-export const getAllItems = async (
-  onSuccess = () => {},
-  onError = (_message) => {}
-) => {
-  try {
-    const response = await axiosPrivate.get("/api/item/getAllItems");
-    if (response.status == 200) {
-      onSuccess();
-    }
-    return response;
-  } catch (error) {
-    onError(error);
-  }
-};
-
-export const getAllItemsByCategory = async (
-  category,
+export const getAllCustomers = async (
   page,
-  pageSize,
   onSuccess = () => {},
   onError = (_message) => {}
 ) => {
   try {
     const response = await axiosPrivate.get(
-      "/api/item/getItemsByCategory?category=" + category + "&page=" + page+ "&pageSize=" + pageSize
+      "/api/customer/getCustomers?page=" + page + "&perPage=10"
     );
     if (response.status == 200) {
       onSuccess();
@@ -72,15 +59,33 @@ export const getAllItemsByCategory = async (
   }
 };
 
-export const getItemsByName = async (
+export const getCustomersByName = async (
   name,
-  category,
   onSuccess = () => {},
   onError = (_message) => {}
 ) => {
   try {
     const response = await axiosPrivate.get(
-      "/api/item/getItemsByName?name=" + name + "&category=" + category
+      "/api/customer/getCustomersByName?name=" + name
+    );
+    if (response.status == 200) {
+      onSuccess();
+    }
+    return response;
+  } catch (error) {
+    onError(error);
+  }
+};
+
+
+export const deleteCustomerById = async (
+  id,
+  onSuccess = () => {},
+  onError = (_message) => {}
+) => {
+  try {
+    const response = await axiosPrivate.delete(
+      "/api/customer/deleteCustomer?id=" + id
     );
     if (response.status == 200) {
       onSuccess();

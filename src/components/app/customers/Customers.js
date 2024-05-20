@@ -3,67 +3,80 @@ import Table from "./table/Table";
 import { Box, Button, ButtonGroup, Paper } from "@mui/material";
 import { Add, Delete, Edit, Vrpano } from "@mui/icons-material";
 import { colors } from "../../../utils/constants/colors";
-import SearchBar from "./searchBar/SearchBar";
+// import SearchBar from "./searchBar/SearchBar";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useIsUserLoggedIn } from "../../../hooks/authentication";
-import {
-  getAllItems,
-  getAllItemsByCategory,
-  getItemsByName,
-} from "../../../services/itemService";
-import { DEF_ACTIONS } from "../../../utils/constants/actions";
-import { useSnackBars } from "../../../context/SnackBarContext";
+import { getAllSalesReps } from "../../../services/salesRepService";
 import { SnackBarTypes } from "../../../utils/constants/snackBarTypes";
+import { useSnackBars } from "../../../context/SnackBarContext";
+import { DEF_ACTIONS } from "../../../utils/constants/actions";
+import {
+  deleteCustomerById,
+  getAllCustomers,
+  getCustomersByName,
+} from "../../../services/customerService";
+import SearchBar from "./searchBar/SearchBar";
+import ConfirmationDialog from "../../confirmation/ConfirmationDialog";
 
-export default function () {
+export default function Customers() {
   const location = useLocation();
   console.log(location?.state?.name);
   useIsUserLoggedIn();
   const [selected, setSelected] = useState([]);
   const [data, setData] = useState([]);
-  const [page,setPage] = useState(1)
-  const [pageSize,setPageSize] = useState(1000)
+  const [page, setPage] = useState(1);
+  const [open, setOpen] = useState(false);
+  const [confMsg, setConfMsg] = useState(
+    "Are you sure you want to delete this customer "
+  );
   const naviagte = useNavigate();
   const addItem = () => {
-    naviagte("/inventory/item-add", {
+    naviagte("/customers/customer-add", {
       state: {
-        name: location?.state?.name,
-        category: location?.state?.category,
         action: DEF_ACTIONS.ADD,
       },
     });
   };
-
   const editItem = () => {
     const item = data.find((item) => item.id == selected[0]);
-    naviagte("/inventory/item-edit", {
+    naviagte("/customers/customer-edit", {
       state: {
-        name: location?.state?.name,
-        //category: location?.state?.category,
         action: DEF_ACTIONS.EDIT,
-        item: item,
+        data: item,
       },
     });
   };
 
   const viewItem = () => {
     const item = data.find((item) => item.id == selected[0]);
-    naviagte("/inventory/item-view", {
+    naviagte("/customers/customer-view", {
       state: {
-        name: location?.state?.name,
-        //category: location?.state?.category,
         action: DEF_ACTIONS.VIEW,
-        item: item,
+        data: item,
       },
     });
   };
 
   const { addSnackBar } = useSnackBars();
 
+  useEffect(() => {
+    getCustomers();
+  }, []);
+
+  const getCustomers = async () => {
+    try {
+      const response = await getAllCustomers(page, onSuccess, onError);
+      setData(response.data.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const onSuccess = () => {
     addSnackBar({
       type: SnackBarTypes.success,
-      message: "Items Fetched Successfully",
+      message: "Customers Fetched Successfully",
     });
   };
   const onError = () => {
@@ -73,13 +86,9 @@ export default function () {
     });
   };
 
-  useEffect(() => {
-    getItems();
-  }, []);
-
-  const getItems = async () => {
+  const searchCustomers = async (name) => {
     try {
-      const response = await getAllItemsByCategory(location?.state?.category, page,pageSize,onSuccess,onError);
+      const response = await getCustomersByName(name);
       setData(response.data.data);
       console.log(response.data);
     } catch (error) {
@@ -87,15 +96,40 @@ export default function () {
     }
   };
 
-  const search = async (e) => {
+  const deleteCustomer = async () => {
     try {
-      const response = await getItemsByName(e , location?.state?.category);
-      setData(response.data.data);
+      const response = await deleteCustomerById(
+        selected,
+        onSuccessDelete,
+        onErrorDelete
+      );
+      getCustomers();
+      handleDialogClose()
     } catch (error) {
       console.log(error);
     }
   };
-  
+
+  const onSuccessDelete = () => {
+    addSnackBar({
+      type: SnackBarTypes.success,
+      message: "Customer Is Deleted Successfully",
+    });
+  };
+  const onErrorDelete = () => {
+    addSnackBar({
+      type: SnackBarTypes.error,
+      message: "There is an error",
+    });
+  };
+
+  const handleDialogOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpen(false);
+  };
   return (
     <div className="w-100 p-3 pt-5 mt-4">
       <Paper sx={{ padding: 2 }}>
@@ -130,21 +164,28 @@ export default function () {
               View
             </Button>
 
-            <Button disabled={selected.length < 1}>
+            <Button disabled={selected.length < 1} onClick={handleDialogOpen}>
               <Delete />
               Delete
             </Button>
           </ButtonGroup>
-          <SearchBar search={search} />
+          <SearchBar search={searchCustomers} />
         </Box>
 
         <Table
           data={data}
           onRowSelect={(row) => {
+            console.log(row);
             setSelected(row);
           }}
         />
       </Paper>
+      <ConfirmationDialog
+        open={open}
+        confirmMsg={confMsg}
+        ConfirmAction={deleteCustomer}
+        handleClose={handleDialogClose}
+      />
     </div>
   );
 }

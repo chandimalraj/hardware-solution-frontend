@@ -8,7 +8,10 @@ export const createSalesRep = async (
   onError = (_message) => {}
 ) => {
   try {
-    const response = await axiosPrivate.post("/api/salesrep/addSalesRep",salesRep);
+    const response = await axiosPrivate.post(
+      "/api/salesrep/addSalesRep",
+      salesRep
+    );
     if (response.status == 201) {
       onSuccess();
     }
@@ -19,17 +22,34 @@ export const createSalesRep = async (
 };
 
 export const getAllSalesReps = async (
-    
-    onSuccess = () => {},
-    onError = (_message) => {}
-  ) => {
-    try {
-      const response = await axiosPrivate.get("/api/salesrep/getSalesReps");
-      if (response.status == 200) {
-        onSuccess();
-      }
-      return response;
-    } catch (error) {
-      onError(error);
+  onSuccess = () => {},
+  onError = (_message) => {}
+) => {
+  try {
+    const response = await axiosPrivate.get("/api/salesrep/getSalesReps");
+    if (response.status == 200) {
+      onSuccess();
     }
-  };
+    return response;
+  } catch (error) {
+    onError(error);
+  }
+};
+
+export const deleteSalesRepById = async (
+  id,
+  onSuccess = () => {},
+  onError = (_message) => {}
+) => {
+  try {
+    const response = await axiosPrivate.delete(
+      "/api/salesrep/deleteSalesRep?id=" + id
+    );
+    if (response.status == 200) {
+      onSuccess();
+    }
+    return response;
+  } catch (error) {
+    onError(error);
+  }
+};

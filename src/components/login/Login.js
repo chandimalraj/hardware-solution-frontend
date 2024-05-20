@@ -11,14 +11,13 @@ import {
 import "./login.css";
 import styled from "styled-components";
 // import { PASSWORD, TEXT } from "./consts";
-// 
+//
 // import { showToasts } from "../toast";
 import { ToastContainer } from "react-toastify";
 import { LoginFunction } from "./LoginFunction";
 import { useIsUserLoggedIn } from "../../hooks/authentication";
 // import LoginComponent from "./userLogin/Login";
 // import ForgotPassword from "./resetPassword/ForgotPassword";
-
 
 export default function Login() {
   const [type, setType] = useState();
@@ -33,9 +32,8 @@ export default function Login() {
     },
   };
 
-   //useIsUserLoggedIn()
+  //useIsUserLoggedIn()
   // useIsUserLoggedIn()
-    
 
   const controlShow = () => {
     setShowLogin(!showLogin);
@@ -48,9 +46,9 @@ export default function Login() {
         <div className="d-flex justify-content-center text-purple f-shippori text-shadow-sm mt-4">
           <h1
             style={sheet.mainTopic}
-            className="text-purple f-shippori text-shadow-sm text-center"
+            className="text-purple f-shippori text-shadow-sm text-center p-5"
           >
-            WELCOME TO HARD SMART
+            WELCOME TO HARDWARE SOLUTION
           </h1>
         </div>
       </div>
@@ -60,11 +58,10 @@ export default function Login() {
         ) : (
           <ForgotPassword controlShow={controlShow} />
         )} */}
-        <LoginFunction/>
+        <LoginFunction />
       </div>
 
       <ToastContainer />
     </div>
   );
 }
-

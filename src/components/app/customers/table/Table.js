@@ -120,15 +120,15 @@ export default function Table({ onRowSelect = (_c) => {}, data = [] }) {
 
   const columns = [
     {
-      field: "name",
-      headerName: "Item Name",
+      field: "customer_name",
+      headerName: "Customer Name",
       width: 300,
       headerClassName: "super-app-theme--header",
     },
     {
-      field: "supplier",
-      headerName: "Supplier",
-      width: 300,
+      field: "customer_address",
+      headerName: "Customer Address",
+      width: 400,
       headerClassName: "super-app-theme--header",
     },
     {
@@ -157,11 +157,11 @@ export default function Table({ onRowSelect = (_c) => {}, data = [] }) {
   const getRowHeight = () => 40;
 
   return (
-    <div style={{ height: 550, width: "100%" }}>
+    <div style={{ height: 500, width: "100%" }}>
       <Box
         sx={{
-          height: 530,
-          width: "96%",
+          height: 500,
+          width: "99%",
         }}
       >
         <StyledDataGrid
@@ -171,12 +171,8 @@ export default function Table({ onRowSelect = (_c) => {}, data = [] }) {
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 10 },
-
             },
-
           }}
-          //paginationMode="server"
-          //pageCount='10'
           disableSelectionOnClick
           onRowSelectionModelChange={onRowSelect}
           getRowHeight={getRowHeight}

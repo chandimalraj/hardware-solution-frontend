@@ -20,20 +20,22 @@ import { useIsUserLoggedIn } from "../../../../hooks/authentication";
 import { DEF_ACTIONS } from "../../../../utils/constants/actions";
 import { useSnackBars } from "../../../../context/SnackBarContext";
 import { SnackBarTypes } from "../../../../utils/constants/snackBarTypes";
-import { createItem } from "../../../../services/itemService";
+import { createItem, editItem } from "../../../../services/itemService";
 
 export default function ItemForm() {
   //const location = useLocation();
   useIsUserLoggedIn();
   const { state } = useLocation();
   const navigate = useNavigate();
-  console.log(state)
+  console.log(state);
   const [selectedImage, setSelectedImage] = useState(
     state?.item?.image_url || null
   );
   const [form, setForm] = useState();
 
-  const [formData, setFormData] = useState(state?.item || {category:state?.category});
+  const [formData, setFormData] = useState(
+    state?.item || { category: state?.category }
+  );
 
   function goBack() {
     navigate(-1); // This will navigate back in the history stack
@@ -85,7 +87,7 @@ export default function ItemForm() {
       formDataNew.append("price", formData?.price);
       formDataNew.append("quantity", formData?.quantity);
       formDataNew.append("image_url", "");
-      
+
       console.log(formDataNew);
 
       const response = await createItem(formDataNew, onSuccess, onError);
@@ -94,6 +96,32 @@ export default function ItemForm() {
       console.log(error);
     }
   };
+
+  const onSuccessEdit = () => {
+    addSnackBar({
+      type: SnackBarTypes.success,
+      message: "Item Updated Successfully",
+    });
+  };
+
+  const submitEditItem = async () => {
+    try {
+      const formDataNew = new FormData();
+      formDataNew.append("file", form);
+      formDataNew.append("id", formData?.id);
+      formDataNew.append("name", formData?.name);
+      formDataNew.append("category", formData?.category);
+      formDataNew.append("price", formData?.price);
+      formDataNew.append("quantity", formData?.quantity);
+      formDataNew.append("image_url", formData?.image_url);
+
+      console.log(formDataNew);
+      const response = await editItem(formDataNew, onSuccessEdit, onError);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="w-100 p-3 pt-5 mt-4">
       <Paper sx={{ padding: 2, height: 600 }}>
@@ -115,22 +143,26 @@ export default function ItemForm() {
         </IconButton>
 
         <Box sx={{ display: "flex", flexDirection: "column", width: 75 }}>
-          {state?.action == DEF_ACTIONS.ADD && <Button
-            sx={{ border: "Highlight" }}
-            variant="contained"
-            onClick={submitForm}
-          >
-            <Add />
-            ADD
-          </Button>}
-          {state?.action == DEF_ACTIONS.EDIT && <Button
-            sx={{ border: "Highlight" }}
-            variant="contained"
-            onClick={submitForm}
-          >
-            <Edit/>
-            EDIT
-          </Button>}
+          {state?.action == DEF_ACTIONS.ADD && (
+            <Button
+              sx={{ border: "Highlight" }}
+              variant="contained"
+              onClick={submitForm}
+            >
+              <Add />
+              ADD
+            </Button>
+          )}
+          {state?.action == DEF_ACTIONS.EDIT && (
+            <Button
+              sx={{ border: "Highlight" }}
+              variant="contained"
+              onClick={submitEditItem}
+            >
+              <Edit />
+              EDIT
+            </Button>
+          )}
         </Box>
         <Grid container sx={{ marginTop: 3 }}>
           <Grid item lg={4}>
@@ -221,7 +253,7 @@ export default function ItemForm() {
               />
             </FieldWrapper>
           </Grid>
-          
+
           <Grid item lg={8}>
             <FieldWrapper>
               <FieldName>Select Item Picture</FieldName>
