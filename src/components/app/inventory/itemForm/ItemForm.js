@@ -34,7 +34,7 @@ export default function ItemForm() {
   const [form, setForm] = useState();
 
   const [formData, setFormData] = useState(
-    state?.item || { category: state?.category }
+    state?.item || { category: state?.category ,unit:'PCS'}
   );
 
   function goBack() {
@@ -85,7 +85,8 @@ export default function ItemForm() {
       formDataNew.append("name", formData?.name);
       formDataNew.append("category", formData?.category);
       formDataNew.append("price", formData?.price);
-      formDataNew.append("quantity", formData?.quantity);
+      formDataNew.append("unit", formData?.unit);
+      formDataNew.append("supplier", formData?.supplier);
       formDataNew.append("image_url", "");
 
       console.log(formDataNew);
@@ -112,7 +113,8 @@ export default function ItemForm() {
       formDataNew.append("name", formData?.name);
       formDataNew.append("category", formData?.category);
       formDataNew.append("price", formData?.price);
-      formDataNew.append("quantity", formData?.quantity);
+      formDataNew.append("unit", formData?.unit);
+      formDataNew.append("supplier", formData?.supplier);
       formDataNew.append("image_url", formData?.image_url);
 
       console.log(formDataNew);
@@ -142,17 +144,20 @@ export default function ItemForm() {
           <KeyboardDoubleArrowLeftIcon />
         </IconButton> */}
 
-        <Box sx={{ display: "flex", flexDirection: "row" ,height:40}}>
-          <Button sx={{ border: "Highlight" }} variant="contained" onClick={goBack}>
-          <KeyboardDoubleArrowLeftIcon />
+        <Box sx={{ display: "flex", flexDirection: "row", height: 40 }}>
+          <Button
+            sx={{ border: "Highlight" }}
+            variant="contained"
+            onClick={goBack}
+          >
+            <KeyboardDoubleArrowLeftIcon />
             BACK
           </Button>
           {state?.action == DEF_ACTIONS.ADD && (
             <Button
-              sx={{ border: "Highlight" , marginLeft:1 }}
+              sx={{ border: "Highlight", marginLeft: 1 }}
               variant="contained"
               onClick={submitForm}
-              
             >
               <Add />
               ADD
@@ -160,7 +165,7 @@ export default function ItemForm() {
           )}
           {state?.action == DEF_ACTIONS.EDIT && (
             <Button
-              sx={{ border: "Highlight", marginLeft:1 }}
+              sx={{ border: "Highlight", marginLeft: 1 }}
               variant="contained"
               onClick={submitEditItem}
             >
@@ -210,25 +215,23 @@ export default function ItemForm() {
                 <MenuItem value={"STEEL"}>Steel</MenuItem>
                 <MenuItem value={"PVC"}>PVC</MenuItem>
                 <MenuItem value={"ELECTRICAL"}>Electrical</MenuItem>
-                <MenuItem value={"BOLT&NUT"}>Bolt & Nut</MenuItem>
+                <MenuItem value={"GROSS"}>Bolt & Nut</MenuItem>
                 <MenuItem value={"PLUMBING"}>Plumbing</MenuItem>
                 <MenuItem value={"OTHER"}>Other</MenuItem>
               </Select>
             </FieldWrapper>
           </Grid>
-          <Grid item lg={2}>
+          <Grid item lg={3}>
             <FieldWrapper>
-              <FieldName>Quantity</FieldName>
+              <FieldName>Supplier</FieldName>
               <TextField
-                name="quantity"
-                id="quantity"
-                value={formData?.quantity || ""}
+                name="supplier"
+                id="supplier"
+                value={formData?.supplier || ""}
                 fullWidth
                 disabled={state?.action === DEF_ACTIONS.VIEW}
-                onChange={(e) =>
-                  handleChange(e?.target?.value || "", "quantity")
-                }
-                type="number"
+                onChange={(e) => handleChange(e?.target?.value || "", "supplier")}
+                type="text"
                 sx={{
                   "& .MuiInputBase-root": {
                     borderRadius: "8px",
@@ -240,7 +243,32 @@ export default function ItemForm() {
           </Grid>
           <Grid item lg={2}>
             <FieldWrapper>
-              <FieldName>Price</FieldName>
+              <FieldName>Unit</FieldName>
+              <Select
+                value={formData?.unit || ""}
+                onChange={(e) => handleChange(e?.target?.value || "", "unit")}
+                sx={{
+                  borderRadius: "8px",
+                }}
+                size="small"
+                fullWidth
+                disabled={state?.action === DEF_ACTIONS.VIEW}
+              >
+                <MenuItem value={"PCS"}>PCS</MenuItem>
+                <MenuItem value={"PKT"}>PKT</MenuItem>
+                <MenuItem value={"KG"}>KG</MenuItem>
+                <MenuItem value={"ROLL"}>ROLL</MenuItem>
+                <MenuItem value={"BOTTLE"}>BOTTLE</MenuItem>
+                <MenuItem value={"GROSS"}>GROSS</MenuItem>
+                <MenuItem value={"DOZ"}>DOZ</MenuItem>
+                <MenuItem value={"BOX"}>BOX</MenuItem>
+              </Select>
+            </FieldWrapper>
+          </Grid>
+          
+          <Grid item lg={2}>
+            <FieldWrapper>
+              <FieldName>Price Rs.</FieldName>
               <TextField
                 name="price"
                 id="price"
@@ -249,12 +277,14 @@ export default function ItemForm() {
                 disabled={state?.action === DEF_ACTIONS.VIEW}
                 onChange={(e) => handleChange(e?.target?.value || "", "price")}
                 type="number"
+                defaultValue={'0'}
                 sx={{
                   "& .MuiInputBase-root": {
                     borderRadius: "8px",
                   },
                 }}
                 size="small"
+                inputProps={{ min: 0 }} 
               />
             </FieldWrapper>
           </Grid>
@@ -294,6 +324,7 @@ export default function ItemForm() {
                       justifyContent: "center",
                       alignItems: "center",
                     }}
+                    
                   >
                     <IconButton component="span" style={{ zIndex: "2" }}>
                       <PhotoCamera />
@@ -305,18 +336,20 @@ export default function ItemForm() {
                         position: "absolute",
                         zIndex: "1",
                         backgroundColor: "rgb(46,125,50,0.1)",
-                        width: "140px",
-                        height: "140px",
-                        borderRadius: "70px",
+                        width: "340px",
+                        height: "240px",
+                        // borderRadius: "70px",
+                        borderRadius: "8px",
                       }}
                     >
                       <img
                         src={selectedImage}
                         alt="Profile"
                         style={{
-                          width: "140px",
-                          height: "140px",
-                          borderRadius: "70px",
+                          width: "340px",
+                          height: "240px",
+                          // borderRadius: "70px",
+                          borderRadius: "8px",
                         }}
                       />
                     </div>

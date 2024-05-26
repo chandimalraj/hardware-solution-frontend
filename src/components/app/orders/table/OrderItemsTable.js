@@ -106,7 +106,10 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   ...customCheckbox(theme),
 }));
 
-export default function Table({ onRowSelect = (_c) => {}, data = [] }) {
+export default function OrderItemsTable({
+  onRowSelect = (_c) => {},
+  data = [],
+}) {
   const formatDate = (timestamp) => {
     const date = new Date(parseInt(timestamp, 10));
     return date.toLocaleDateString();
@@ -120,49 +123,50 @@ export default function Table({ onRowSelect = (_c) => {}, data = [] }) {
 
   const columns = [
     {
-      field: "name",
+      field: "itemName",
       headerName: "Item Name",
+      width: 230,
+      headerClassName: "super-app-theme--header",
+      valueGetter: (params) => params.row.item.name,
+    },
+    {
+      field: "item",
+      headerName: "Category",
       width: 300,
       headerClassName: "super-app-theme--header",
+      valueGetter: (params) => params.row.item.category,
     },
     {
-      field: "supplier",
-      headerName: "Supplier",
-      width: 300,
+      field: "quantity",
+      headerName: "Quantity",
+      width: 100,
       headerClassName: "super-app-theme--header",
     },
     {
-      field: "unit",
-      headerName: "Unit",
+      field: "item",
+      headerName: "Item Price",
       width: 180,
       headerClassName: "super-app-theme--header",
+      valueGetter: (params) => params.row.item.price,
     },
     {
-      field: "price",
-      headerName: "Price",
-      width: 180,
-      headerClassName: "super-app-theme--header",
-      valueGetter: (params) =>( "Rs " + parseFloat(params.row.price).toFixed(2)),
-    },
-    {
-      field: "availability",
-      headerName: "Availability",
+      field: "total",
+      headerName: "Total",
       width: 180,
       flex: 1,
-      //headerClassName: "super-app-theme--header",
-      cellStyle: cellStyle,
-      
+      headerClassName: "super-app-theme--header",
+      valueGetter: (params) =>( parseFloat(params.row.item.price) * parseFloat(params.row.quantity)).toFixed(2),
     },
   ];
 
   const getRowHeight = () => 40;
 
   return (
-    <div style={{ height: 550, width: "100%" }}>
+    <div style={{ height: 500, width: "100%" }}>
       <Box
         sx={{
-          height: 530,
-          width: "96%",
+          height: 500,
+          width: "auto",
         }}
       >
         <StyledDataGrid
@@ -171,13 +175,9 @@ export default function Table({ onRowSelect = (_c) => {}, data = [] }) {
           columns={columns}
           initialState={{
             pagination: {
-              paginationModel: { page: 0, pageSize: 10 },
-
+              paginationModel: { page: 0, pageSize: 5 },
             },
-
           }}
-          //paginationMode="server"
-          //pageCount='10'
           disableSelectionOnClick
           onRowSelectionModelChange={onRowSelect}
           getRowHeight={getRowHeight}

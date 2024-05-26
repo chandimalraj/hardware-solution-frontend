@@ -120,38 +120,40 @@ export default function Table({ onRowSelect = (_c) => {}, data = [] }) {
 
   const columns = [
     {
-      field: "name",
-      headerName: "Item Name",
+      field: "id",
+      headerName: "ID",
+      width: 70,
+      headerClassName: "super-app-theme--header",
+    },
+    {
+      field: "customer",
+      headerName: "Customer",
       width: 300,
       headerClassName: "super-app-theme--header",
+      valueGetter: (params) => params.row.customer.customer_name,
     },
     {
-      field: "supplier",
-      headerName: "Supplier",
+      field: "customer Address",
+      headerName: "Customer Address",
       width: 300,
       headerClassName: "super-app-theme--header",
+      valueGetter: (params) => params.row.customer.customer_address,
     },
     {
-      field: "price",
-      headerName: "Price",
+      field: "salesrep",
+      headerName: "Sales Rep",
       width: 180,
       headerClassName: "super-app-theme--header",
+      valueGetter: (params) => params.row.salesRep.name,
     },
     {
-      field: "quantity",
-      headerName: "Quantity",
-      width: 180,
-      headerClassName: "super-app-theme--header",
-    },
-    {
-      field: "availability",
-      headerName: "Availability",
+      field: "total",
+      headerName: "Total",
       width: 180,
       flex: 1,
-      //headerClassName: "super-app-theme--header",
-      cellStyle: cellStyle,
-      
+      headerClassName: "super-app-theme--header",
     },
+    
   ];
 
   const getRowHeight = () => 40;
@@ -161,18 +163,18 @@ export default function Table({ onRowSelect = (_c) => {}, data = [] }) {
       <Box
         sx={{
           height: 500,
-          width: "99%",
+          width: "auto",
         }}
       >
         <StyledDataGrid
           checkboxSelection
           rows={data}
           columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
+          // initialState={{
+          //   pagination: {
+          //     paginationModel: { page: 0, pageSize: 5 },
+          //   },
+          // }}
           disableSelectionOnClick
           onRowSelectionModelChange={onRowSelect}
           getRowHeight={getRowHeight}

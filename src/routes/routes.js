@@ -9,6 +9,7 @@ import SalesRepForm from "../components/app/sales-reps/salesRepForm/SalesRepForm
 import Orders from "../components/app/orders/Orders";
 import Customers from "../components/app/customers/Customers";
 import CustomerForm from "../components/app/customers/customerForm/customerForm";
+import OrderItems from "../components/app/orders/OrderItems";
 
 export const Routes = [
   {
@@ -96,6 +97,10 @@ export const Routes = [
   {
     path: "/orders",
     element: <Orders />,
+  },
+  {
+    path: "/orders/order-items",
+    element: <OrderItems />,
   },
   {
     path: "/customers",

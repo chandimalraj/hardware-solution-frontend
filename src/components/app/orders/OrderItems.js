@@ -14,45 +14,26 @@ import {
 import { DEF_ACTIONS } from "../../../utils/constants/actions";
 import { useSnackBars } from "../../../context/SnackBarContext";
 import { SnackBarTypes } from "../../../utils/constants/snackBarTypes";
-import { getAllOrders } from "../../../services/orderService";
+import { getAllOrders, getItemsByOrder } from "../../../services/orderService";
+import OrderItemsTable from "./table/OrderItemsTable";
 
 export default function () {
   const location = useLocation();
-  console.log(location?.state?.name);
+  console.log(location?.state?.order);
+  const order = location?.state?.order
   useIsUserLoggedIn();
   const [selected, setSelected] = useState([]);
   const [data, setData] = useState([]);
   const naviagte = useNavigate();
-  const addItem = () => {
-    naviagte("/inventory/item-add", {
-      state: {
-        name: location?.state?.name,
-        category: location?.state?.category,
-        action: DEF_ACTIONS.ADD,
-      },
-    });
-  };
-
-  const editItem = () => {
+  
+   const viewItem = () => {
     const item = data.find((item) => item.id == selected[0]);
-    naviagte("/inventory/item-edit", {
-      state: {
-        name: location?.state?.name,
-        //category: location?.state?.category,
-        action: DEF_ACTIONS.EDIT,
-        item: item,
-      },
-    });
-  };
-
-  const viewItem = () => {
-    const order = data.find((item) => item.id == selected[0]);
-    naviagte("/orders/order-items", {
+    naviagte("/inventory/item-view", {
       state: {
         name: location?.state?.name,
         //category: location?.state?.category,
         action: DEF_ACTIONS.VIEW,
-        order: order,
+        item: item,
       },
     });
   };
@@ -73,12 +54,12 @@ export default function () {
   };
 
   useEffect(() => {
-    getOrders();
+    getItems();
   }, []);
 
-  const getOrders = async () => {
+  const getItems = async () => {
     try {
-      const response = await getAllOrders();
+      const response = await getItemsByOrder(order.id);
       setData(response.data.data);
       console.log(response.data);
     } catch (error) {
@@ -109,24 +90,11 @@ export default function () {
             size="small"
             aria-label="action button group"
             sx={{
-              //color:colors.main,
+              
               marginRight: 5,
             }}
           >
-            {/* <Button sx={{ border: "Highlight" }} onClick={addItem}>
-              <Add />
-              ADD
-            </Button>
-
-            <Button disabled={selected.length !== 1} onClick={editItem}>
-              <Edit />
-              Edit
-            </Button>
-
-            <Button disabled={selected.length !== 1} onClick={viewItem}>
-              <Vrpano />
-              View
-            </Button> */}
+            
              <Button disabled={selected.length !== 1} onClick={viewItem}>
               <Vrpano />
               View
@@ -142,7 +110,7 @@ export default function () {
           <SearchBar search={search} field = "Sales Rep"/>
         </Box>
 
-        <Table
+        <OrderItemsTable
           data={data}
           
           onRowSelect={(row) => {

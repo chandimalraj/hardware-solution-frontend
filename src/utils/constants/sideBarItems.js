@@ -38,6 +38,7 @@ export const Menu = [
     name: "Orders",
     icon: <LocalShippingIcon />,
     link: "/orders",
+    subPaths: ["/orders/order-items"],
   },
   {
     name: "Sales Reps",
