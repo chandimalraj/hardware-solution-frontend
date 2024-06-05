@@ -93,6 +93,7 @@ export function LoginFunction(props) {
   const login = async () => {
     try {
       const response = await userLogin(formData, onSuccess);
+      console.log(response)
       if (response.status == 200) {
         console.log(response);
 

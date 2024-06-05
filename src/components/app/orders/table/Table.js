@@ -147,11 +147,12 @@ export default function Table({ onRowSelect = (_c) => {}, data = [] }) {
       valueGetter: (params) => params.row.salesRep.name,
     },
     {
-      field: "total",
-      headerName: "Total",
+      field: "pending",
+      headerName: "Status",
       width: 180,
       flex: 1,
       headerClassName: "super-app-theme--header",
+      valueGetter: (params) => params.row.pending? 'PENDING':'ACCEPTED',
     },
     
   ];
@@ -163,7 +164,7 @@ export default function Table({ onRowSelect = (_c) => {}, data = [] }) {
       <Box
         sx={{
           height: 500,
-          width: "auto",
+          width: "96%",
         }}
       >
         <StyledDataGrid

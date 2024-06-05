@@ -20,7 +20,7 @@ export default function SearchBar(props) {
       </IconButton>
       <InputBase
         sx={{ ml: 1, flex: 1 }}
-        placeholder= {"Search By " + field}
+        placeholder= {"Search by " + field}
         inputProps={{ "aria-label": "search google maps" }}
         onChange={(e)=>search(e.target.value)}
       />

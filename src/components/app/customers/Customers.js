@@ -13,10 +13,12 @@ import { DEF_ACTIONS } from "../../../utils/constants/actions";
 import {
   deleteCustomerById,
   getAllCustomers,
+  getCustomersByAreas,
   getCustomersByName,
 } from "../../../services/customerService";
 import SearchBar from "./searchBar/SearchBar";
 import ConfirmationDialog from "../../confirmation/ConfirmationDialog";
+import MultipleSelectChip from "./customerFilter/CustomerFilterByAreas";
 
 export default function Customers() {
   const location = useLocation();
@@ -25,6 +27,8 @@ export default function Customers() {
   const [selected, setSelected] = useState([]);
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages , setTotalPages] = useState(10)
   const [open, setOpen] = useState(false);
   const [confMsg, setConfMsg] = useState(
     "Are you sure you want to delete this customer "
@@ -61,13 +65,14 @@ export default function Customers() {
 
   useEffect(() => {
     getCustomers();
-  }, []);
+  }, [page]);
 
   const getCustomers = async () => {
     try {
-      const response = await getAllCustomers(page, onSuccess, onError);
+      const response = await getAllCustomers(page,pageSize, onSuccess, onError);
       setData(response.data.data);
-      console.log(response.data);
+      setTotalPages(response.data.totalPages)
+      
     } catch (error) {
       console.log(error);
     }
@@ -104,7 +109,7 @@ export default function Customers() {
         onErrorDelete
       );
       getCustomers();
-      handleDialogClose()
+      handleDialogClose();
     } catch (error) {
       console.log(error);
     }
@@ -123,6 +128,16 @@ export default function Customers() {
     });
   };
 
+  const filterCustomers = async (areas) => {
+    try {
+      const response = await getCustomersByAreas(areas);
+      setData(response.data.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleDialogOpen = () => {
     setOpen(true);
   };
@@ -130,6 +145,10 @@ export default function Customers() {
   const handleDialogClose = () => {
     setOpen(false);
   };
+
+  const handlePageChange = (e,newPage)=>{
+    setPage(newPage)
+ }
   return (
     <div className="w-100 p-3 pt-5 mt-4">
       <Paper sx={{ padding: 2 }}>
@@ -137,6 +156,7 @@ export default function Customers() {
           sx={{
             marginBottom: 1,
             display: "flex",
+            height: 45,
           }}
         >
           <ButtonGroup
@@ -170,6 +190,7 @@ export default function Customers() {
             </Button>
           </ButtonGroup>
           <SearchBar search={searchCustomers} />
+          <MultipleSelectChip filterCustomers={filterCustomers}/>
         </Box>
 
         <Table
@@ -178,6 +199,9 @@ export default function Customers() {
             console.log(row);
             setSelected(row);
           }}
+          totalpages={totalPages}
+          page={page}
+          handlePageChange={handlePageChange}
         />
       </Paper>
       <ConfirmationDialog

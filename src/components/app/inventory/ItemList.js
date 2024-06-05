@@ -7,6 +7,7 @@ import SearchBar from "./searchBar/SearchBar";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useIsUserLoggedIn } from "../../../hooks/authentication";
 import {
+  deleteItemById,
   getAllItems,
   getAllItemsByCategory,
   getItemsByName,
@@ -15,7 +16,7 @@ import { DEF_ACTIONS } from "../../../utils/constants/actions";
 import { useSnackBars } from "../../../context/SnackBarContext";
 import { SnackBarTypes } from "../../../utils/constants/snackBarTypes";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
-
+import ConfirmationDialog from "../../confirmation/ConfirmationDialog";
 
 export default function () {
   const location = useLocation();
@@ -24,7 +25,14 @@ export default function () {
   const [selected, setSelected] = useState([]);
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(1000);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages , setTotalPages] = useState(10)
+
+  const [open, setOpen] = useState(false);
+  const [confMsg, setConfMsg] = useState(
+    "Are you sure you want to delete this item "
+  );
+
   const naviagte = useNavigate();
   const addItem = () => {
     naviagte("/inventory/item-add", {
@@ -77,7 +85,7 @@ export default function () {
 
   useEffect(() => {
     getItems();
-  }, []);
+  }, [page]);
 
   const getItems = async () => {
     try {
@@ -89,11 +97,15 @@ export default function () {
         onError
       );
       setData(response.data.data);
+      setTotalPages(response.data.totalPages)
       console.log(response.data);
     } catch (error) {
       console.log(error);
     }
   };
+  const handlePageChange = (e,newPage)=>{
+     setPage(newPage)
+  }
 
   const search = async (e) => {
     try {
@@ -104,24 +116,63 @@ export default function () {
     }
   };
 
-  const goToCategories = ()=>{
-    naviagte("/inventory")
-  }
+  const goToCategories = () => {
+    naviagte("/inventory");
+  };
+
+  const deleteItem = async () => {
+    try {
+      const response = await deleteItemById(
+        selected[0],
+        onSuccessDelete,
+        onErrorDelete
+      );
+      getItems()
+      handleDialogClose()
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onSuccessDelete = () => {
+    addSnackBar({
+      type: SnackBarTypes.success,
+      message: "Item deleted Successfully",
+    });
+  };
+  const onErrorDelete = () => {
+    addSnackBar({
+      type: SnackBarTypes.error,
+      message: "There is an error",
+    });
+  };
+
+  const handleDialogOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpen(false);
+  };
 
   return (
-    <div className="w-100 p-3 pt-5 mt-4">
+    <div className="w-100 p-3 pt-5 mt-4" style={{ overflowX:"hidden" }}>
       <Paper sx={{ padding: 2 }}>
         <Box
           sx={{
             marginBottom: 1,
             display: "flex",
-            height:45
+            height: 45,
           }}
         >
-          <Button sx={{ border: "Highlight" }} onClick={goToCategories} variant="contained">
-          <KeyboardDoubleArrowLeftIcon />
-              BACK
-            </Button>
+          <Button
+            sx={{ border: "Highlight" }}
+            onClick={goToCategories}
+            variant="contained"
+          >
+            <KeyboardDoubleArrowLeftIcon />
+            BACK
+          </Button>
           <Typography
             sx={{
               fontSize: 16,
@@ -132,8 +183,8 @@ export default function () {
               backgroundColor: colors.main,
               padding: 1,
               borderRadius: 1,
-              height:45,
-              marginLeft:2
+              height: 45,
+              marginLeft: 2,
             }}
           >
             {location?.state?.name}
@@ -172,7 +223,7 @@ export default function () {
               View
             </Button>
 
-            <Button disabled={selected.length < 1}>
+            <Button disabled={selected.length < 1} onClick={handleDialogOpen}>
               <Delete />
               Delete
             </Button>
@@ -185,8 +236,17 @@ export default function () {
           onRowSelect={(row) => {
             setSelected(row);
           }}
+          totalpages={totalPages}
+          page={page}
+          handlePageChange={handlePageChange}
         />
       </Paper>
+      <ConfirmationDialog
+        open={open}
+        confirmMsg={confMsg}
+        ConfirmAction={deleteItem}
+        handleClose={handleDialogClose}
+      />
     </div>
   );
 }

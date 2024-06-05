@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Checkbox } from "@mui/material";
+import { Box, Checkbox, Pagination } from "@mui/material";
 //import { Colors } from "../../../utils/constants/Colors";
 //
 import { styled } from "@mui/material/styles";
@@ -106,7 +106,9 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   ...customCheckbox(theme),
 }));
 
-export default function Table({ onRowSelect = (_c) => {}, data = [] }) {
+export default function Table({ onRowSelect = (_c) => {}, data = [] ,page,totalpages ,handlePageChange}) {
+
+  
   const formatDate = (timestamp) => {
     const date = new Date(parseInt(timestamp, 10));
     return date.toLocaleDateString();
@@ -142,26 +144,29 @@ export default function Table({ onRowSelect = (_c) => {}, data = [] }) {
       headerName: "Price",
       width: 180,
       headerClassName: "super-app-theme--header",
+      flex: 1,
       valueGetter: (params) =>( "Rs " + parseFloat(params.row.price).toFixed(2)),
     },
-    {
-      field: "availability",
-      headerName: "Availability",
-      width: 180,
-      flex: 1,
-      //headerClassName: "super-app-theme--header",
-      cellStyle: cellStyle,
+    // {
+    //   field: "availability",
+    //   headerName: "Availability",
+    //   width: 80,
+    //   flex: 1,
+    //   headerClassName: "super-app-theme--header",
       
-    },
+      
+    // },
   ];
 
   const getRowHeight = () => 40;
 
+  
+
   return (
-    <div style={{ height: 550, width: "100%" }}>
+    <div style={{ height: 600, width: "100%" }}>
       <Box
         sx={{
-          height: 530,
+          height: 510,
           width: "96%",
         }}
       >
@@ -181,7 +186,16 @@ export default function Table({ onRowSelect = (_c) => {}, data = [] }) {
           disableSelectionOnClick
           onRowSelectionModelChange={onRowSelect}
           getRowHeight={getRowHeight}
+         
         />
+        <Pagination
+        count={totalpages}
+        page={page}
+        onChange={handlePageChange}
+        showFirstButton
+        showLastButton
+        sx={{ mt: -1 }}
+      />
       </Box>
     </div>
   );

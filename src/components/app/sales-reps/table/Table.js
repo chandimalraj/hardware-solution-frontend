@@ -120,14 +120,8 @@ export default function Table({ onRowSelect = (_c) => {}, data = [] }) {
 
   const columns = [
     {
-      field: "id",
-      headerName: "Id",
-      width: 200,
-      headerClassName: "super-app-theme--header",
-    },
-    {
       field: "name",
-      headerName: "Name",
+      headerName: "User Name",
       width: 300,
       headerClassName: "super-app-theme--header",
       renderCell: (params) =>
@@ -135,34 +129,13 @@ export default function Table({ onRowSelect = (_c) => {}, data = [] }) {
           ? params.row.farmerDTO.address
           : params.row.address,
     },
-    {
-      field: "password",
-      headerName: "Password",
-      width: 180,
-      headerClassName: "super-app-theme--header",
-    },
+
     {
       field: "nic",
       headerName: "Nic",
       width: 180,
-
       headerClassName: "super-app-theme--header",
-    },
-    {
-      field: "availability",
-      headerName: "Availability",
-      width: 180,
-      flex: 1,
-      //headerClassName: "super-app-theme--header",
-      cellStyle: cellStyle,
-      cellRenderer: (data) => {
-        <CheckBox color="success" />;
-        // return true ? (
-        //   <CheckBox color="success" />
-        // ) : (
-        //   <CheckBoxOutlineBlankIcon color="success"/>
-        // );
-      },
+      flex:1
     },
   ];
 

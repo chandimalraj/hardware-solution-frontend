@@ -36,15 +36,50 @@ export const getItemsByOrder = async (
   }
 };
 
-export const getItemsByName = async (
-  name,
-  category,
+export const getOrdersByCustomerCode = async (
+  code,
   onSuccess = () => {},
   onError = (_message) => {}
 ) => {
   try {
     const response = await axiosPrivate.get(
-      "/api/item/getItemsByName?name=" + name + "&category=" + category
+      "/api/order/getOrdersByCustomerCode?code=" + code
+    );
+    if (response.status == 200) {
+      onSuccess();
+    }
+    return response;
+  } catch (error) {
+    onError(error);
+  }
+};
+
+export const getOrdersBySalesRepName = async (
+  name,
+  onSuccess = () => {},
+  onError = (_message) => {}
+) => {
+  try {
+    const response = await axiosPrivate.get(
+      "/api/order/getOrdersBySalesRep?name=" + name
+    );
+    if (response.status == 200) {
+      onSuccess();
+    }
+    return response;
+  } catch (error) {
+    onError(error);
+  }
+};
+
+export const deleteOrderById = async (
+  id,
+  onSuccess = () => {},
+  onError = (_message) => {}
+) => {
+  try {
+    const response = await axiosPrivate.delete(
+      "/api/order/deleteOrder?id=" + id
     );
     if (response.status == 200) {
       onSuccess();

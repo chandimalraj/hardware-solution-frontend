@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Table from "./table/Table";
-import { Box, Button, ButtonGroup, Paper } from "@mui/material";
+import { Box, Button, ButtonGroup, Paper, Typography } from "@mui/material";
 import { Add, Delete, Edit, Vrpano } from "@mui/icons-material";
 import { colors } from "../../../utils/constants/colors";
 import SearchBar from "./searchBar/SearchBar";
@@ -16,6 +16,7 @@ import { useSnackBars } from "../../../context/SnackBarContext";
 import { SnackBarTypes } from "../../../utils/constants/snackBarTypes";
 import { getAllOrders, getItemsByOrder } from "../../../services/orderService";
 import OrderItemsTable from "./table/OrderItemsTable";
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 
 export default function () {
   const location = useLocation();
@@ -24,11 +25,16 @@ export default function () {
   useIsUserLoggedIn();
   const [selected, setSelected] = useState([]);
   const [data, setData] = useState([]);
-  const naviagte = useNavigate();
+  const [total,setTotal] = useState(0)
+  const navigate = useNavigate();
+
+  function goBack() {
+    navigate(-1); // This will navigate back in the history stack
+  }
   
    const viewItem = () => {
     const item = data.find((item) => item.id == selected[0]);
-    naviagte("/inventory/item-view", {
+    navigate("/inventory/item-view", {
       state: {
         name: location?.state?.name,
         //category: location?.state?.category,
@@ -60,7 +66,8 @@ export default function () {
   const getItems = async () => {
     try {
       const response = await getItemsByOrder(order.id);
-      setData(response.data.data);
+      setData(response.data.data.data);
+      setTotal(response.data.data.total)
       console.log(response.data);
     } catch (error) {
       console.log(error);
@@ -84,30 +91,23 @@ export default function () {
             display: "flex",
           }}
         >
-          <ButtonGroup
+          <Button
+            sx={{ border: "Highlight" }}
             variant="contained"
-            disableElevation
-            size="small"
-            aria-label="action button group"
-            sx={{
-              
-              marginRight: 5,
-            }}
+            onClick={goBack}
           >
-            
-             <Button disabled={selected.length !== 1} onClick={viewItem}>
-              <Vrpano />
-              View
-            </Button>
-
-            <Button disabled={selected.length < 1}>
-              <Delete />
-              Delete
-            </Button>
-
-          </ButtonGroup>
-          <SearchBar search={search} field = "Customer Name"/>
-          <SearchBar search={search} field = "Sales Rep"/>
+            <KeyboardDoubleArrowLeftIcon />
+            BACK
+          </Button>
+          
+          <Typography sx={{ fontFamily:'roboto' ,marginLeft:5 ,fontSize:18,marginTop:1,fontWeight:700}}>
+           Order Total Rs
+          </Typography>
+          <Typography sx={{ fontFamily:'roboto' ,marginLeft:2 ,fontSize:25,color:'red',fontWeight:700}}>
+            {parseFloat(total).toFixed(2)}
+          </Typography>
+          
+          
         </Box>
 
         <OrderItemsTable

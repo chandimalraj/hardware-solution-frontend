@@ -1,6 +1,6 @@
 import { ChildCare } from "@mui/icons-material";
 import Inventory from "../components/app/inventory/Inventory";
-import Dashboard from "../components/dashboard/Dashboard";
+import Dashboard from "../components/app/dashboard/Dashboard";
 import Login from "../components/login/Login";
 import ItemList from "../components/app/inventory/ItemList";
 import ItemForm from "../components/app/inventory/itemForm/ItemForm";

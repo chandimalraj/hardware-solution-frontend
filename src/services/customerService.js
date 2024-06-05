@@ -43,12 +43,13 @@ export const editCustomer = async (
 
 export const getAllCustomers = async (
   page,
+  pageSize,
   onSuccess = () => {},
   onError = (_message) => {}
 ) => {
   try {
     const response = await axiosPrivate.get(
-      "/api/customer/getCustomers?page=" + page + "&perPage=10"
+      "/api/customer/getCustomers?page=" + page + "&perPage=" + pageSize
     );
     if (response.status == 200) {
       onSuccess();
@@ -76,6 +77,24 @@ export const getCustomersByName = async (
     onError(error);
   }
 };
+
+export const getCustomersByAreas = async (
+  areas,
+  onSuccess = () => {},
+  onError = (_message) => {}
+) => {
+  try {
+    const response = await axiosPrivate.get(
+      "/api/customer/getCustomersByAreas?areas=" + areas
+    );
+    if (response.status == 200) {
+      onSuccess();
+    }
+    return response;
+  } catch (error) {
+    onError(error);
+  }
+}
 
 
 export const deleteCustomerById = async (

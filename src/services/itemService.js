@@ -80,7 +80,26 @@ export const getItemsByName = async (
 ) => {
   try {
     const response = await axiosPrivate.get(
-      "/api/item/getItemsByName?name=" + name + "&category=" + category
+      "/api/item/getItemsByName?name=" + name + "&category=" + category + "&page=1&pageSize=100"
+    );
+    if (response.status == 200) {
+      onSuccess();
+    }
+    return response;
+  } catch (error) {
+    onError(error);
+  }
+};
+
+
+export const deleteItemById = async (
+  id,
+  onSuccess = () => {},
+  onError = (_message) => {}
+) => {
+  try {
+    const response = await axiosPrivate.delete(
+      "/api/item/deleteItem?id=" + id
     );
     if (response.status == 200) {
       onSuccess();

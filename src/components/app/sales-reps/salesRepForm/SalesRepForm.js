@@ -21,14 +21,17 @@ import { DEF_ACTIONS } from "../../../../utils/constants/actions";
 import { useSnackBars } from "../../../../context/SnackBarContext";
 import { SnackBarTypes } from "../../../../utils/constants/snackBarTypes";
 import { createItem } from "../../../../services/itemService";
-import { createSalesRep, editSalesRep } from "../../../../services/salesRepService";
+import {
+  createSalesRep,
+  editSalesRep,
+} from "../../../../services/salesRepService";
 
 export default function SalesRepForm() {
   useIsUserLoggedIn();
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  console.log(state)
+  console.log(state);
 
   const [formData, setFormData] = useState(state?.data || {});
 
@@ -67,15 +70,14 @@ export default function SalesRepForm() {
 
   const submitForm = async () => {
     try {
-      if(state?.action == DEF_ACTIONS.ADD){
+      if (state?.action == DEF_ACTIONS.ADD) {
         const response = await createSalesRep(formData, onSuccess, onError);
         console.log(response);
       }
-      if(state?.action == DEF_ACTIONS.EDIT){
+      if (state?.action == DEF_ACTIONS.EDIT) {
         const response = await editSalesRep(formData, onSuccessEdit, onError);
         console.log(response);
       }
-      
     } catch (error) {
       console.log(error);
     }
@@ -83,7 +85,7 @@ export default function SalesRepForm() {
   return (
     <div className="w-100 p-3 pt-5 mt-4">
       <Paper sx={{ padding: 2, height: 600 }}>
-        <IconButton
+        {/* <IconButton
           sx={{
             minWidth: 10,
             justifyContent: "center",
@@ -97,25 +99,38 @@ export default function SalesRepForm() {
           onClick={goBack}
         >
           <KeyboardDoubleArrowLeftIcon />
-        </IconButton>
+        </IconButton> */}
 
-        <Box sx={{ display: "flex", flexDirection: "column", width: 75 }}>
-          {state.action == DEF_ACTIONS.ADD && <Button
+        <Box sx={{ display: "flex", flexDirection: "row", height: 40 }}>
+        <Button
             sx={{ border: "Highlight" }}
             variant="contained"
-            onClick={submitForm}
+            onClick={goBack}
           >
-            <Add />
-            ADD
-          </Button>}
-          {state.action == DEF_ACTIONS.EDIT && <Button
-            sx={{ border: "Highlight" }}
-            variant="contained"
-            onClick={submitForm}
-          >
-            <Edit />
-            Edit
-          </Button>}
+            <KeyboardDoubleArrowLeftIcon />
+            BACK
+          </Button>
+          {state.action == DEF_ACTIONS.ADD && (
+            <Button
+              sx={{ border: "Highlight" , marginLeft: 1}}
+              variant="contained"
+              onClick={submitForm}
+              
+            >
+              <Add />
+              ADD
+            </Button>
+          )}
+          {state.action == DEF_ACTIONS.EDIT && (
+            <Button
+              sx={{ border: "Highlight", marginLeft: 1 }}
+              variant="contained"
+              onClick={submitForm}
+            >
+              <Edit />
+              Edit
+            </Button>
+          )}
         </Box>
         <Grid container sx={{ marginTop: 3 }}>
           <Grid item lg={4}>

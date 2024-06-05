@@ -151,7 +151,7 @@ export default function OrderItemsTable({
     },
     {
       field: "total",
-      headerName: "Total",
+      headerName: "Total Rs",
       width: 180,
       flex: 1,
       headerClassName: "super-app-theme--header",
@@ -166,7 +166,7 @@ export default function OrderItemsTable({
       <Box
         sx={{
           height: 500,
-          width: "auto",
+          width: "90%",
         }}
       >
         <StyledDataGrid

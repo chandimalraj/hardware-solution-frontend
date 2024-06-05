@@ -21,7 +21,10 @@ import { DEF_ACTIONS } from "../../../../utils/constants/actions";
 import { useSnackBars } from "../../../../context/SnackBarContext";
 import { SnackBarTypes } from "../../../../utils/constants/snackBarTypes";
 import { createItem, editItem } from "../../../../services/itemService";
-import { createCustomer, editCustomer } from "../../../../services/customerService";
+import {
+  createCustomer,
+  editCustomer,
+} from "../../../../services/customerService";
 
 export default function CustomerForm() {
   //const location = useLocation();
@@ -87,27 +90,18 @@ export default function CustomerForm() {
   return (
     <div className="w-100 p-3 pt-5 mt-4">
       <Paper sx={{ padding: 2, height: 600 }}>
-        <IconButton
-          sx={{
-            minWidth: 10,
-            //   mr: open ? 3 : "auto",
-            justifyContent: "center",
-            color: "#e5e4e2",
-            backgroundColor: "#035CA1",
-            marginBottom: 2,
-            "&:hover": {
-              backgroundColor: "#035CA1", // Change this value to your desired hover background color
-            },
-          }}
-          onClick={goBack}
-        >
-          <KeyboardDoubleArrowLeftIcon />
-        </IconButton>
-
-        <Box sx={{ display: "flex", flexDirection: "column", width: 75 }}>
+        <Box sx={{ display: "flex", flexDirection: "row", height: 40 }}>
+          <Button
+            sx={{ border: "Highlight" }}
+            variant="contained"
+            onClick={goBack}
+          >
+            <KeyboardDoubleArrowLeftIcon />
+            BACK
+          </Button>
           {state?.action == DEF_ACTIONS.ADD && (
             <Button
-              sx={{ border: "Highlight" }}
+              sx={{ border: "Highlight", marginLeft: 1 }}
               variant="contained"
               onClick={submitForm}
             >
@@ -117,7 +111,7 @@ export default function CustomerForm() {
           )}
           {state?.action == DEF_ACTIONS.EDIT && (
             <Button
-              sx={{ border: "Highlight" }}
+              sx={{ border: "Highlight", marginLeft: 1 }}
               variant="contained"
               onClick={submitEditItem}
             >
@@ -169,6 +163,103 @@ export default function CustomerForm() {
                 }}
                 size="small"
               />
+            </FieldWrapper>
+          </Grid>
+          <Grid item lg={2}>
+            <FieldWrapper>
+              <FieldName>Customer Code</FieldName>
+              <TextField
+                name="customer_code"
+                id="customer_code"
+                value={formData?.customer_code || ""}
+                fullWidth
+                disabled={state?.action === DEF_ACTIONS.VIEW}
+                onChange={(e) =>
+                  handleChange(e?.target?.value || "", "customer_code")
+                }
+                type="text"
+                sx={{
+                  "& .MuiInputBase-root": {
+                    borderRadius: "8px",
+                  },
+                }}
+                size="small"
+              />
+            </FieldWrapper>
+          </Grid>
+          <Grid item lg={2}></Grid>
+          <Grid item lg={2}>
+            <FieldWrapper>
+              <FieldName>Telephone</FieldName>
+              <TextField
+                name="telephone"
+                id="telephone"
+                value={formData?.telephone || ""}
+                fullWidth
+                disabled={state?.action === DEF_ACTIONS.VIEW}
+                onChange={(e) =>
+                  handleChange(e?.target?.value || "", "telephone")
+                }
+                type="text"
+                sx={{
+                  "& .MuiInputBase-root": {
+                    borderRadius: "8px",
+                  },
+                }}
+                size="small"
+              />
+            </FieldWrapper>
+          </Grid>
+
+          <Grid item lg={2}>
+            <FieldWrapper>
+              <FieldName>Mobile</FieldName>
+              <TextField
+                name="mobile"
+                id="mobile"
+                value={formData?.mobile || ""}
+                fullWidth
+                disabled={state?.action === DEF_ACTIONS.VIEW}
+                onChange={(e) => handleChange(e?.target?.value || "", "mobile")}
+                type="text"
+                sx={{
+                  "& .MuiInputBase-root": {
+                    borderRadius: "8px",
+                  },
+                }}
+                size="small"
+              />
+            </FieldWrapper>
+          </Grid>
+          <Grid item lg={3}>
+            <FieldWrapper>
+              <FieldName>Area</FieldName>
+              <Select
+                value={formData?.area || ""}
+                onChange={(e) => handleChange(e?.target?.value || "", "area")}
+                sx={{
+                  borderRadius: "8px",
+                }}
+                size="small"
+                fullWidth
+                disabled={state?.action === DEF_ACTIONS.VIEW}
+              >
+                <MenuItem value={"GAMPAHA"}>GAMPAHA</MenuItem>
+                <MenuItem value={"COLOMBO"}>COLOMBO</MenuItem>
+                <MenuItem value={"DAMBULLA"}>DAMBULLA</MenuItem>
+                <MenuItem value={"POLONNARUWA"}>POLONNARUWA</MenuItem>
+                <MenuItem value={"ANURADHAPURA"}>ANURADHAPURA</MenuItem>
+                <MenuItem value={"MONARAGALA"}>MONARAGALA</MenuItem>
+                <MenuItem value={"AMPARA"}>AMPARA</MenuItem>
+                <MenuItem value={"BADULLA"}>BADULLA</MenuItem>
+                <MenuItem value={"RATNAPURA"}>RATNAPURA</MenuItem>
+                <MenuItem value={"MAHIYANGANAYA"}>MAHIYANGANAYA</MenuItem>
+                <MenuItem value={"CHILLAW"}>CHILLAW</MenuItem>
+                <MenuItem value={"PUTTALAM"}>PUTTALAM</MenuItem>
+                <MenuItem value={"JAFFNA"}>JAFFNA</MenuItem>
+                <MenuItem value={"DEHIATTAKANDIYA"}>DEHIATTAKANDIYA</MenuItem>
+                <MenuItem value={"SIYAMBALANDUWA"}>SIYAMBALANDUWA</MenuItem>
+              </Select>
             </FieldWrapper>
           </Grid>
         </Grid>

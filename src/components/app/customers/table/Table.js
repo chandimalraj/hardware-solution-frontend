@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Checkbox } from "@mui/material";
+import { Box, Checkbox, Pagination } from "@mui/material";
 //import { Colors } from "../../../utils/constants/Colors";
 //
 import { styled } from "@mui/material/styles";
@@ -106,7 +106,13 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   ...customCheckbox(theme),
 }));
 
-export default function Table({ onRowSelect = (_c) => {}, data = [] }) {
+export default function Table({
+  onRowSelect = (_c) => {},
+  data = [],
+  page,
+  totalpages,
+  handlePageChange,
+}) {
   const formatDate = (timestamp) => {
     const date = new Date(parseInt(timestamp, 10));
     return date.toLocaleDateString();
@@ -121,43 +127,50 @@ export default function Table({ onRowSelect = (_c) => {}, data = [] }) {
   const columns = [
     {
       field: "customer_name",
-      headerName: "Customer Name",
-      width: 300,
+      headerName: "Name",
+      width: 250,
       headerClassName: "super-app-theme--header",
     },
     {
       field: "customer_address",
-      headerName: "Customer Address",
-      width: 400,
+      headerName: "Address",
+      width: 350,
       headerClassName: "super-app-theme--header",
     },
     {
-      field: "price",
-      headerName: "Price",
-      width: 180,
+      field: "customer_code",
+      headerName: "Code",
+      width: 120,
       headerClassName: "super-app-theme--header",
     },
     {
-      field: "quantity",
-      headerName: "Quantity",
-      width: 180,
+      field: "telephone",
+      headerName: "Telephone",
+      width: 130,
       headerClassName: "super-app-theme--header",
     },
     {
-      field: "availability",
-      headerName: "Availability",
-      width: 180,
+      field: "mobile",
+      headerName: "Mobile",
+      width: 130,
+
+      //headerClassName: "super-app-theme--header",
+      cellStyle: cellStyle,
+    },
+    {
+      field: "area",
+      headerName: "Area",
+      width: 150,
       flex: 1,
       //headerClassName: "super-app-theme--header",
       cellStyle: cellStyle,
-      
     },
   ];
 
   const getRowHeight = () => 40;
 
   return (
-    <div style={{ height: 500, width: "100%" }}>
+    <div style={{ height: 550, width: "100%" }}>
       <Box
         sx={{
           height: 500,
@@ -176,6 +189,14 @@ export default function Table({ onRowSelect = (_c) => {}, data = [] }) {
           disableSelectionOnClick
           onRowSelectionModelChange={onRowSelect}
           getRowHeight={getRowHeight}
+        />
+        <Pagination
+          count={totalpages}
+          page={page}
+          onChange={handlePageChange}
+          showFirstButton
+          showLastButton
+          sx={{ mt: -1 }}
         />
       </Box>
     </div>
